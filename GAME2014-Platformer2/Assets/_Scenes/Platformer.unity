@@ -152,7 +152,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 76b7d8e56bf62194cb4b8583d156aa48, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -59556,7 +59556,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: eb5456f3c047c024293a0e79cc0849a5, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -80587,9 +80587,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 2479e5f23a953e7439dd5f04cf65a9db, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 70dc3c40b5785424ea86289161cff95a, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.25
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -81594,7 +81594,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 4334783836991956000, guid: d9f4364463720df488941784504289b9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dcf605baf759ff7429b17713ef31a80c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -81613,8 +81613,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2013978523}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: -0.5, z: 0}
-  m_LocalScale: {x: 0.0974793, y: 0.09688736, z: 1}
+  m_LocalPosition: {x: -5.97, y: 0.28, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1668633780}
   - {fileID: 911476813}
@@ -81634,8 +81634,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.028681122, y: 0.5145346}
-  m_Size: {x: 12.254879, y: 16.648085}
+  m_Offset: {x: -0.073843956, y: -0.18560207}
+  m_Size: {x: 1.1429634, y: 1.7870595}
   m_Direction: 0
 --- !u!50 &2013978528
 Rigidbody2D:
@@ -81715,18 +81715,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.062051296, y: 0.07094288}
+  m_Offset: {x: -0.09604454, y: -0.1774919}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 13.125, y: 15.625}
+    oldSize: {x: 3.125, y: 2.3125}
     newSize: {x: 2.0625, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 11.895328, y: 15.728844}
+  m_Size: {x: 1.1899605, y: 1.7712307}
   m_EdgeRadius: 0
 --- !u!1 &2067062134
 GameObject:

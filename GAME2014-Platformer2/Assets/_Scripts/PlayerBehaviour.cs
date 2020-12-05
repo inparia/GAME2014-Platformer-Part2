@@ -166,7 +166,7 @@ public class PlayerBehaviour : MonoBehaviour
                 isJumping = false;
             }
 
-            /*if ((joystick.Vertical < -joystickVerticalSensitivity) && (!isCrouching))
+            if ((joystick.Vertical < -joystickVerticalSensitivity) && (!isCrouching))
             {
                 // Crouch
                 m_animator.SetInteger("AnimState", (int)PlayerAnimationType.CROUCH);
@@ -176,7 +176,7 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 isCrouching = false;
             }
-            */
+            
         }
 
         if (isInWater)
