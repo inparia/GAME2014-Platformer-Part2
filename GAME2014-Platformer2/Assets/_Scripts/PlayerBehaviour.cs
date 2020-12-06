@@ -7,19 +7,26 @@ using UnityEngine.SceneManagement;
 public class PlayerBehaviour : MonoBehaviour
 {
 
+    [Header("Controls")]
     public Joystick joystick;
     public int score;
     public float joystickHorizontalSensitivity;
     public float joystickVerticalSensitivity;
     public float horizontalForce;
     public float verticalForce;
+
+    [Header("Checks")]
     public bool isGrounded;
     public bool isJumping;
     public bool isCrouching;
     public bool isInWater;
     public bool isRamp;
     public bool dmgTaken;
+    private bool victory;
+    private bool atkAvail;
 
+    private bool isAttacking;
+    [Header("Platform Detection")]
     public RampDirection rampDirection;
     public bool isGroundedAhead;
     public bool onRamp;
@@ -31,24 +38,29 @@ public class PlayerBehaviour : MonoBehaviour
     public LayerMask collisonGroundLayer;
     public LayerMask collisonWallLayer;
 
+    [Header("Spawn Point")]
     public Transform spawnPoint;
 
     private Rigidbody2D m_rigidBody2D;
     private SpriteRenderer m_spriteRenderer;
-
     private Animator m_animator;
 
+    [Header("Texts")]
     public Text saveText;
     public Text lifeText;
     public Text scoreText;
-
     private bool dispText;
-    private bool victory;
-    private bool atkAvail;
+
+
+    [Header("Timers")]
     private float timeRemaining = 5, anotherTimeRemaining = 5, attackTiming = 0.4f;
     private int life;
-    private bool isAttacking;
 
+    [Header("Particle Effects")]
+    public ParticleSystem dustTrail;
+    public Color dustTrailColour;
+
+    [Header("Audios")]
     public AudioSource[] Audios;
     // Start is called before the first frame update
     void Start()
@@ -57,6 +69,7 @@ public class PlayerBehaviour : MonoBehaviour
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_animator = GetComponent<Animator>();
         rampDirection = RampDirection.NONE;
+        dustTrail = GetComponentInChildren<ParticleSystem>();
         dispText = false;
         life = 3;
         victory = false;
@@ -135,22 +148,26 @@ public class PlayerBehaviour : MonoBehaviour
                 if (joystick.Horizontal > joystickHorizontalSensitivity)
                 {
                     // move right
+                    CreateDustTrail();
                     m_rigidBody2D.AddForce(Vector2.right * horizontalForce * Time.deltaTime);
                     m_spriteRenderer.flipX = false;
                     m_animator.SetInteger("AnimState", (int)PlayerAnimationType.RUN);
                     lookAheadPoint.localPosition = new Vector3(Mathf.Abs(lookAheadPoint.localPosition.x), lookAheadPoint.localPosition.y, lookAheadPoint.localPosition.z);
                     lookInFrontPoint.localPosition = new Vector3(Mathf.Abs(lookInFrontPoint.localPosition.x), lookInFrontPoint.localPosition.y, lookInFrontPoint.localPosition.z);
                     maxMelee.localPosition = new Vector3(Mathf.Abs(maxMelee.localPosition.x), maxMelee.localPosition.y, maxMelee.localPosition.z);
+
                 }
                 else if (joystick.Horizontal < -joystickHorizontalSensitivity)
                 {
                     // move left
+                    CreateDustTrail();
                     m_rigidBody2D.AddForce(Vector2.left * horizontalForce * Time.deltaTime);
                     m_spriteRenderer.flipX = true;
                     m_animator.SetInteger("AnimState", (int)PlayerAnimationType.RUN);
                     lookAheadPoint.localPosition = new Vector3(-Mathf.Abs(lookAheadPoint.localPosition.x), lookAheadPoint.localPosition.y, lookAheadPoint.localPosition.z);
                     lookInFrontPoint.localPosition = new Vector3(-Mathf.Abs(lookInFrontPoint.localPosition.x), lookInFrontPoint.localPosition.y, lookInFrontPoint.localPosition.z);
                     maxMelee.localPosition = new Vector3(-Mathf.Abs(maxMelee.localPosition.x), maxMelee.localPosition.y, maxMelee.localPosition.z);
+
                 }
                 else
                 {
@@ -173,11 +190,11 @@ public class PlayerBehaviour : MonoBehaviour
 
             if ((joystick.Vertical > joystickVerticalSensitivity) && (!isJumping))
             {
+                CreateDustTrail();
                 m_rigidBody2D.AddForce(Vector2.up * verticalForce);
                 m_animator.SetInteger("AnimState", (int)PlayerAnimationType.JUMP);
                 isJumping = true;
                 Audios[1].Play();
-
             }
             else
             {
@@ -372,5 +389,12 @@ public class PlayerBehaviour : MonoBehaviour
                 dmgTaken = false;
             }
         }
+    }
+
+    private void CreateDustTrail()
+    {
+        dustTrail.GetComponent<Renderer>().material.SetColor("_Color", dustTrailColour);
+
+        dustTrail.Play();
     }
 }

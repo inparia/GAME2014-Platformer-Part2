@@ -25,7 +25,7 @@ TagManager:
   - Platforms
   - Walls
   - Ramps
-  - 
+  - Player
   - 
   - 
   - 
@@ -49,4 +49,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 529901783
     locked: 0
