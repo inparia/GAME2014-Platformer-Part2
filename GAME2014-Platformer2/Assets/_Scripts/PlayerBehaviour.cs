@@ -49,10 +49,7 @@ public class PlayerBehaviour : MonoBehaviour
     private int life;
     private bool isAttacking;
 
-    public AudioSource hitAudio;
-    public AudioSource jumpAudio;
-    public AudioSource victoryAudio;
-    public AudioSource backgroundAudio;
+    public AudioSource[] Audios;
     // Start is called before the first frame update
     void Start()
     {
@@ -179,7 +176,7 @@ public class PlayerBehaviour : MonoBehaviour
                 m_rigidBody2D.AddForce(Vector2.up * verticalForce);
                 m_animator.SetInteger("AnimState", (int)PlayerAnimationType.JUMP);
                 isJumping = true;
-                jumpAudio.Play();
+                Audios[1].Play();
 
             }
             else
@@ -281,11 +278,12 @@ public class PlayerBehaviour : MonoBehaviour
         {
             m_animator.SetInteger("AnimState", (int)PlayerAnimationType.ATTACK);
             isAttacking = true;
+            Audios[4].Play();
             if(maxMeleeObj.GetComponent<MaxMeleeCheck>().enemyObj != null && atkAvail)
             {
                 maxMeleeObj.GetComponent<MaxMeleeCheck>().enemyObj.SetActive(false);
                 score = score + 100;
-                hitAudio.Play();
+                Audios[0].Play();
             }
         }
     }
@@ -329,16 +327,8 @@ public class PlayerBehaviour : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Enemy"))
         {
-            if (m_rigidBody2D.position.y > other.gameObject.GetComponent<Rigidbody2D>().position.y + 1)
-            {
-                m_rigidBody2D.AddForce(Vector2.up * verticalForce / 2.0f);
-                other.gameObject.SetActive(false);
-            }
-            else
-            {
-                transform.position = spawnPoint.position;
-                dmgTaken = true;
-            }
+            transform.position = spawnPoint.position;
+            dmgTaken = true;
         }
         if (other.gameObject.CompareTag("SavePoint") && !other.gameObject.GetComponent<SavePoint>().savePointEnabled)
         {
@@ -349,8 +339,8 @@ public class PlayerBehaviour : MonoBehaviour
 
         if (other.gameObject.CompareTag("Goal"))
         {
-            backgroundAudio.Stop();
-            victoryAudio.Play();
+            Audios[3].Stop();
+            Audios[2].Play();
             victory = true;
         }
 
@@ -367,14 +357,9 @@ public class PlayerBehaviour : MonoBehaviour
         {
             if (dmgTaken)
             {
-                hitAudio.Play();
+                Audios[5].Play();
                 life--;
                 dmgTaken = false;
-            }
-            else
-            {
-                jumpAudio.Play();
-                score = score + 100;
             }
         }
 
@@ -382,7 +367,7 @@ public class PlayerBehaviour : MonoBehaviour
         {
             if (dmgTaken)
             {
-                hitAudio.Play();
+                Audios[5].Play();
                 life--;
                 dmgTaken = false;
             }
