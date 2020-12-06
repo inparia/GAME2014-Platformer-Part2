@@ -55,6 +55,7 @@ public class PlayerBehaviour : MonoBehaviour
     [Header("Timers")]
     private float timeRemaining = 5, anotherTimeRemaining = 5, attackTiming = 0.4f;
     private int life;
+    public BarController healthBar;
 
     [Header("Particle Effects")]
     public ParticleSystem dustTrail;
@@ -376,6 +377,7 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 Audios[5].Play();
                 life--;
+                healthBar.SetValue(life);
                 dmgTaken = false;
             }
         }
@@ -386,6 +388,7 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 Audios[5].Play();
                 life--;
+                healthBar.SetValue(life);
                 dmgTaken = false;
             }
         }
