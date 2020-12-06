@@ -26,6 +26,8 @@ public class PlayerBehaviour : MonoBehaviour
     public bool isPaused;
     public Transform lookAheadPoint;
     public Transform lookInFrontPoint;
+    public Transform maxMelee;
+    public GameObject maxMeleeObj;
     public LayerMask collisonGroundLayer;
     public LayerMask collisonWallLayer;
 
@@ -42,8 +44,10 @@ public class PlayerBehaviour : MonoBehaviour
 
     private bool dispText;
     private bool victory;
-    private float timeRemaining = 5, anotherTimeRemaining = 5;
+    private bool atkAvail;
+    private float timeRemaining = 5, anotherTimeRemaining = 5, attackTiming = 0.4f;
     private int life;
+    private bool isAttacking;
 
     public AudioSource hitAudio;
     public AudioSource jumpAudio;
@@ -61,7 +65,9 @@ public class PlayerBehaviour : MonoBehaviour
         victory = false;
         isPaused = false;
         score = 0;
+        isAttacking = false;
     }
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -102,6 +108,21 @@ public class PlayerBehaviour : MonoBehaviour
                 SceneManager.LoadScene("EndScene(Win)");
             }
         }
+
+        if(isAttacking)
+        {
+            if(attackTiming > 0)
+            {
+               attackTiming -= Time.deltaTime;
+            }
+            else
+            {
+                m_animator.SetInteger("AnimState", (int)PlayerAnimationType.IDLE);
+                attackTiming = 0.4f;
+                isAttacking = false;
+            }
+        }
+        attackCheck();
         _LookInFront();
         _LookAhead();
         _Move();
@@ -110,11 +131,9 @@ public class PlayerBehaviour : MonoBehaviour
     void _Move()
     {
 
-       
-
         if (isGrounded || isRamp)
         {
-            if(!isJumping && !isCrouching)
+            if(!isJumping && !isCrouching && !isAttacking)
             {
                 if (joystick.Horizontal > joystickHorizontalSensitivity)
                 {
@@ -124,6 +143,7 @@ public class PlayerBehaviour : MonoBehaviour
                     m_animator.SetInteger("AnimState", (int)PlayerAnimationType.RUN);
                     lookAheadPoint.localPosition = new Vector3(Mathf.Abs(lookAheadPoint.localPosition.x), lookAheadPoint.localPosition.y, lookAheadPoint.localPosition.z);
                     lookInFrontPoint.localPosition = new Vector3(Mathf.Abs(lookInFrontPoint.localPosition.x), lookInFrontPoint.localPosition.y, lookInFrontPoint.localPosition.z);
+                    maxMelee.localPosition = new Vector3(Mathf.Abs(maxMelee.localPosition.x), maxMelee.localPosition.y, maxMelee.localPosition.z);
                 }
                 else if (joystick.Horizontal < -joystickHorizontalSensitivity)
                 {
@@ -131,8 +151,9 @@ public class PlayerBehaviour : MonoBehaviour
                     m_rigidBody2D.AddForce(Vector2.left * horizontalForce * Time.deltaTime);
                     m_spriteRenderer.flipX = true;
                     m_animator.SetInteger("AnimState", (int)PlayerAnimationType.RUN);
-                    lookAheadPoint.localPosition = new Vector3(lookAheadPoint.localPosition.x * -1.0f, lookAheadPoint.localPosition.y, lookAheadPoint.localPosition.z);
-                    lookInFrontPoint.localPosition = new Vector3(lookInFrontPoint.localPosition.x * -1.0f, lookInFrontPoint.localPosition.y, lookInFrontPoint.localPosition.z);
+                    lookAheadPoint.localPosition = new Vector3(-Mathf.Abs(lookAheadPoint.localPosition.x), lookAheadPoint.localPosition.y, lookAheadPoint.localPosition.z);
+                    lookInFrontPoint.localPosition = new Vector3(-Mathf.Abs(lookInFrontPoint.localPosition.x), lookInFrontPoint.localPosition.y, lookInFrontPoint.localPosition.z);
+                    maxMelee.localPosition = new Vector3(-Mathf.Abs(maxMelee.localPosition.x), maxMelee.localPosition.y, maxMelee.localPosition.z);
                 }
                 else
                 {
@@ -203,6 +224,18 @@ public class PlayerBehaviour : MonoBehaviour
         
 
     }
+
+    private void attackCheck()
+    {
+        if(maxMeleeObj.GetComponent<MaxMeleeCheck>().ableToAttack)
+        {
+            atkAvail = true;
+        }
+        else
+        {
+            atkAvail = false;
+        }
+    }
     private void _LookAhead()
     {
         var groundHit = Physics2D.Linecast(transform.position, lookAheadPoint.position, collisonGroundLayer);
@@ -242,6 +275,20 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
+    public void _Attack()
+    {
+        if (!isAttacking)
+        {
+            m_animator.SetInteger("AnimState", (int)PlayerAnimationType.ATTACK);
+            isAttacking = true;
+            if(maxMeleeObj.GetComponent<MaxMeleeCheck>().enemyObj != null && atkAvail)
+            {
+                maxMeleeObj.GetComponent<MaxMeleeCheck>().enemyObj.SetActive(false);
+                score = score + 100;
+                hitAudio.Play();
+            }
+        }
+    }
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Platforms"))
@@ -286,7 +333,6 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 m_rigidBody2D.AddForce(Vector2.up * verticalForce / 2.0f);
                 other.gameObject.SetActive(false);
-                score = score + 100;
             }
             else
             {
@@ -328,6 +374,7 @@ public class PlayerBehaviour : MonoBehaviour
             else
             {
                 jumpAudio.Play();
+                score = score + 100;
             }
         }
 

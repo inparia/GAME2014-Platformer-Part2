@@ -8,5 +8,6 @@ public enum PlayerAnimationType
     IDLE,
     RUN,
     JUMP,
-    CROUCH
+    CROUCH,
+    ATTACK
 }
