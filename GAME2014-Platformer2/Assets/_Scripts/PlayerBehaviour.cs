@@ -292,7 +292,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void _Attack()
     {
-        if (!isAttacking)
+        if (!isJumping && !isInWater && !isAttacking)
         {
             m_animator.SetInteger("AnimState", (int)PlayerAnimationType.ATTACK);
             isAttacking = true;
